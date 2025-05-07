@@ -1,12 +1,15 @@
 package com.example.TiendaSuplementos.Model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "categorias")
 public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     private String nombre;
@@ -36,5 +39,5 @@ public class Categoria {
         this.descripcion = descripcion;
     }
 
-    // Getters y Setters
+
 }

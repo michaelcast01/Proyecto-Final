@@ -28,18 +28,20 @@ public class EnvioController {
     }
 
     @PostMapping
-    public Envio crear(@RequestBody Envio envio) {
-        return service.guardar(envio);
+    public ResponseEntity<Envio> crear(@RequestBody Envio envio) {
+        Envio creado = service.guardar(envio);
+        return ResponseEntity.ok(creado);
     }
 
     @PutMapping("/{id}")
-    public Envio actualizar(@PathVariable Long id, @RequestBody Envio envio) {
-        envio.setId(id);
-        return service.guardar(envio);
+    public ResponseEntity<Envio> actualizar(@PathVariable Long id, @RequestBody Envio envio) {
+        Envio actualizado = service.actualizar(id, envio);
+        return ResponseEntity.ok(actualizado);
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         service.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,5 +1,7 @@
 package com.example.TiendaSuplementos.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -7,17 +9,19 @@ import jakarta.persistence.*;
 public class DetallePedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @Column(name = "id_pedido")
-    private Long idPedido;
+    @ManyToOne
+    @JoinColumn(name = "id_pedido", nullable = false)
+    @JsonBackReference
+    private Pedido pedido;
 
-    @Column(name = "id_producto")
-    private Long idProducto;
+    @ManyToOne
+    @JoinColumn(name = "id_producto", nullable = false)
+    private Producto producto;
 
     private Integer cantidad;
-
-    @Column(name = "precio_unitario")
     private Double precioUnitario;
 
     public Long getId() {
@@ -28,20 +32,20 @@ public class DetallePedido {
         this.id = id;
     }
 
-    public Long getIdPedido() {
-        return idPedido;
+    public Pedido getPedido() {
+        return pedido;
     }
 
-    public void setIdPedido(Long idPedido) {
-        this.idPedido = idPedido;
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
     }
 
-    public Long getIdProducto() {
-        return idProducto;
+    public Producto getProducto() {
+        return producto;
     }
 
-    public void setIdProducto(Long idProducto) {
-        this.idProducto = idProducto;
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
     public Integer getCantidad() {

@@ -28,18 +28,20 @@ public class PagoController {
     }
 
     @PostMapping
-    public Pago crear(@RequestBody Pago pago) {
-        return service.guardar(pago);
+    public ResponseEntity<Pago> crear(@RequestBody Pago pago) {
+        Pago creado = service.guardar(pago);
+        return ResponseEntity.ok(creado);
     }
 
     @PutMapping("/{id}")
-    public Pago actualizar(@PathVariable Long id, @RequestBody Pago pago) {
-        pago.setId(id);
-        return service.guardar(pago);
+    public ResponseEntity<Pago> actualizar(@PathVariable Long id, @RequestBody Pago pago) {
+        Pago actualizado = service.actualizar(id, pago);
+        return ResponseEntity.ok(actualizado);
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         service.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -28,18 +28,20 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public Categoria crear(@RequestBody Categoria categoria) {
-        return service.guardar(categoria);
+    public ResponseEntity<Categoria> crear(@RequestBody Categoria categoria) {
+        Categoria creada = service.guardar(categoria);
+        return ResponseEntity.ok(creada);
     }
 
     @PutMapping("/{id}")
-    public Categoria actualizar(@PathVariable Long id, @RequestBody Categoria categoria) {
-        categoria.setId(id);
-        return service.guardar(categoria);
+    public ResponseEntity<Categoria> actualizar(@PathVariable Long id, @RequestBody Categoria categoria) {
+        Categoria actualizada = service.actualizar(id, categoria);
+        return ResponseEntity.ok(actualizada);
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         service.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }

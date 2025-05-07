@@ -28,18 +28,20 @@ public class ProductoController {
     }
 
     @PostMapping
-    public Producto crear(@RequestBody Producto producto) {
-        return service.guardar(producto);
+    public ResponseEntity<Producto> crear(@RequestBody Producto producto) {
+        Producto creado = service.guardar(producto);
+        return ResponseEntity.ok(creado);
     }
 
     @PutMapping("/{id}")
-    public Producto actualizar(@PathVariable Long id, @RequestBody Producto producto) {
-        producto.setId(id);
-        return service.guardar(producto);
+    public ResponseEntity<Producto> actualizar(@PathVariable Long id, @RequestBody Producto producto) {
+        Producto actualizado = service.actualizar(id, producto);
+        return ResponseEntity.ok(actualizado);
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         service.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }

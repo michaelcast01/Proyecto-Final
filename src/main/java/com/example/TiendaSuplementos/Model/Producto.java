@@ -1,5 +1,6 @@
 package com.example.TiendaSuplementos.Model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -7,20 +8,17 @@ import jakarta.persistence.*;
 public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     private String nombre;
     private String descripcion;
     private Double precio;
+    private Integer stock;
 
-    @Column(name = "cantidad_stock")
-    private Integer cantidadStock;
-
-    @Column(name = "url_imagen")
-    private String urlImagen;
-
-    @Column(name = "id_categoria")
-    private Long idCategoria;
+    @ManyToOne
+    @JoinColumn(name = "id_categoria", nullable = false)
+    private Categoria categoria;
 
     public Long getId() {
         return id;
@@ -54,27 +52,19 @@ public class Producto {
         this.precio = precio;
     }
 
-    public Integer getCantidadStock() {
-        return cantidadStock;
+    public Integer getStock() {
+        return stock;
     }
 
-    public void setCantidadStock(Integer cantidadStock) {
-        this.cantidadStock = cantidadStock;
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
 
-    public String getUrlImagen() {
-        return urlImagen;
+    public Categoria getCategoria() {
+        return categoria;
     }
 
-    public void setUrlImagen(String urlImagen) {
-        this.urlImagen = urlImagen;
-    }
-
-    public Long getIdCategoria() {
-        return idCategoria;
-    }
-
-    public void setIdCategoria(Long idCategoria) {
-        this.idCategoria = idCategoria;
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 }

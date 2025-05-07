@@ -2,6 +2,7 @@ package com.example.TiendaSuplementos.Repository;
 
 import com.example.TiendaSuplementos.Model.Categoria;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
-}
+@Repository
+public interface CategoriaRepository extends JpaRepository<Categoria, Long> { }

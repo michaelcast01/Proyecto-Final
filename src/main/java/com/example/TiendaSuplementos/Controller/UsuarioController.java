@@ -28,18 +28,20 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public Usuario crear(@RequestBody Usuario usuario) {
-        return service.guardar(usuario);
+    public ResponseEntity<Usuario> crear(@RequestBody Usuario usuario) {
+        Usuario creado = service.guardar(usuario);
+        return ResponseEntity.ok(creado);
     }
 
     @PutMapping("/{id}")
-    public Usuario actualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
-        usuario.setId(id);
-        return service.guardar(usuario);
+    public ResponseEntity<Usuario> actualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
+        Usuario actualizado = service.actualizar(id, usuario);
+        return ResponseEntity.ok(actualizado);
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         service.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }

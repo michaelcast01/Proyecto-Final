@@ -14,19 +14,22 @@ public class EnvioService {
     @Autowired
     private EnvioRepository repository;
 
-    public List<Envio> listar() {
-        return repository.findAll();
+    public List<Envio> listar() { return repository.findAll(); }
+    public Optional<Envio> porId(Long id) { return repository.findById(id); }
+    public Envio guardar(Envio envio) { return repository.save(envio); }
+    public Envio actualizar(Long id, Envio envio) {
+        return repository.findById(id)
+                .map(e -> {
+                    e.setDireccion(envio.getDireccion());
+                    e.setCiudad(envio.getCiudad());
+                    e.setProvincia(envio.getProvincia());
+                    e.setCodigoPostal(envio.getCodigoPostal());
+                    e.setFechaEnvio(envio.getFechaEnvio());
+                    e.setFechaEntrega(envio.getFechaEntrega());
+                    e.setTransportadora(envio.getTransportadora());
+                    return repository.save(e);
+                })
+                .orElseThrow(() -> new RuntimeException("Envio no encontrado"));
     }
-
-    public Optional<Envio> porId(Long id) {
-        return repository.findById(id);
-    }
-
-    public Envio guardar(Envio envio) {
-        return repository.save(envio);
-    }
-
-    public void eliminar(Long id) {
-        repository.deleteById(id);
-    }
+    public void eliminar(Long id) { repository.deleteById(id); }
 }

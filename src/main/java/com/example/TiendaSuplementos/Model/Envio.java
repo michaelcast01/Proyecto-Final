@@ -1,5 +1,7 @@
 package com.example.TiendaSuplementos.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 
@@ -8,24 +10,20 @@ import java.sql.Timestamp;
 public class Envio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @Column(name = "id_pedido")
-    private Long idPedido;
+    @ManyToOne
+    @JoinColumn(name = "id_pedido", nullable = false)
+    @JsonBackReference
+    private Pedido pedido;
 
     private String direccion;
     private String ciudad;
     private String provincia;
-
-    @Column(name = "codigo_postal")
     private String codigoPostal;
-
-    @Column(name = "fecha_envio")
     private Timestamp fechaEnvio;
-
-    @Column(name = "fecha_entrega")
     private Timestamp fechaEntrega;
-
     private String transportadora;
 
     public Long getId() {
@@ -36,12 +34,12 @@ public class Envio {
         this.id = id;
     }
 
-    public Long getIdPedido() {
-        return idPedido;
+    public Pedido getPedido() {
+        return pedido;
     }
 
-    public void setIdPedido(Long idPedido) {
-        this.idPedido = idPedido;
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
     }
 
     public String getDireccion() {

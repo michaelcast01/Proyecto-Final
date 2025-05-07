@@ -14,19 +14,17 @@ public class PedidoService {
     @Autowired
     private PedidoRepository repository;
 
-    public List<Pedido> listar() {
-        return repository.findAll();
+    public List<Pedido> listar() { return repository.findAll(); }
+    public Optional<Pedido> porId(Long id) { return repository.findById(id); }
+    public Pedido guardar(Pedido pedido) { return repository.save(pedido); }
+    public Pedido actualizar(Long id, Pedido pedido) {
+        return repository.findById(id)
+                .map(p -> {
+                    p.setFechaPedido(pedido.getFechaPedido());
+                    p.setEstado(pedido.getEstado());
+                    return repository.save(p);
+                })
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
     }
-
-    public Optional<Pedido> porId(Long id) {
-        return repository.findById(id);
-    }
-
-    public Pedido guardar(Pedido pedido) {
-        return repository.save(pedido);
-    }
-
-    public void eliminar(Long id) {
-        repository.deleteById(id);
-    }
+    public void eliminar(Long id) { repository.deleteById(id); }
 }

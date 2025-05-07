@@ -14,19 +14,18 @@ public class DetallePedidoService {
     @Autowired
     private DetallePedidoRepository repository;
 
-    public List<DetallePedido> listar() {
-        return repository.findAll();
+    public List<DetallePedido> listar() { return repository.findAll(); }
+    public Optional<DetallePedido> porId(Long id) { return repository.findById(id); }
+    public DetallePedido guardar(DetallePedido detalle) { return repository.save(detalle); }
+    public DetallePedido actualizar(Long id, DetallePedido detalle) {
+        return repository.findById(id)
+                .map(d -> {
+                    d.setCantidad(detalle.getCantidad());
+                    d.setPrecioUnitario(detalle.getPrecioUnitario());
+                    d.setProducto(detalle.getProducto());
+                    return repository.save(d);
+                })
+                .orElseThrow(() -> new RuntimeException("DetallePedido no encontrado"));
     }
-
-    public Optional<DetallePedido> porId(Long id) {
-        return repository.findById(id);
-    }
-
-    public DetallePedido guardar(DetallePedido detalle) {
-        return repository.save(detalle);
-    }
-
-    public void eliminar(Long id) {
-        repository.deleteById(id);
-    }
+    public void eliminar(Long id) { repository.deleteById(id); }
 }

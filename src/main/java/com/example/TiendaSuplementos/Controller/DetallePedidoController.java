@@ -28,18 +28,20 @@ public class DetallePedidoController {
     }
 
     @PostMapping
-    public DetallePedido crear(@RequestBody DetallePedido detalle) {
-        return service.guardar(detalle);
+    public ResponseEntity<DetallePedido> crear(@RequestBody DetallePedido detalle) {
+        DetallePedido creado = service.guardar(detalle);
+        return ResponseEntity.ok(creado);
     }
 
     @PutMapping("/{id}")
-    public DetallePedido actualizar(@PathVariable Long id, @RequestBody DetallePedido detalle) {
-        detalle.setId(id);
-        return service.guardar(detalle);
+    public ResponseEntity<DetallePedido> actualizar(@PathVariable Long id, @RequestBody DetallePedido detalle) {
+        DetallePedido actualizado = service.actualizar(id, detalle);
+        return	ResponseEntity.ok(actualizado);
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         service.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }

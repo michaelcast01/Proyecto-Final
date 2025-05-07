@@ -14,19 +14,18 @@ public class PagoService {
     @Autowired
     private PagoRepository repository;
 
-    public List<Pago> listar() {
-        return repository.findAll();
+    public List<Pago> listar() { return repository.findAll(); }
+    public Optional<Pago> porId(Long id) { return repository.findById(id); }
+    public Pago guardar(Pago pago) { return repository.save(pago); }
+    public Pago actualizar(Long id, Pago pago) {
+        return repository.findById(id)
+                .map(p -> {
+                    p.setMetodoPago(pago.getMetodoPago());
+                    p.setEstado(pago.getEstado());
+                    p.setFechaPago(pago.getFechaPago());
+                    return repository.save(p);
+                })
+                .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
     }
-
-    public Optional<Pago> porId(Long id) {
-        return repository.findById(id);
-    }
-
-    public Pago guardar(Pago pago) {
-        return repository.save(pago);
-    }
-
-    public void eliminar(Long id) {
-        repository.deleteById(id);
-    }
+    public void eliminar(Long id) { repository.deleteById(id); }
 }
