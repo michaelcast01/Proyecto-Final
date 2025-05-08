@@ -1,23 +1,20 @@
-// Pedido.java
 package com.example.TiendaSuplementos.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "pedidos")
 public class Pedido {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "id_usuario")
+    // link a Usuario
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", nullable = false)
     @JsonBackReference
     private Usuario usuario;
 
@@ -29,18 +26,10 @@ public class Pedido {
     @Column(name = "monto_total")
     private Double montoTotal;
 
-    @OneToMany(
-            mappedBy = "pedido",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    @JsonManagedReference
-    private List<DetallePedido> detalle = new ArrayList<>();
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetallePedido> detalle;
 
-    // --- Constructores ---
-    public Pedido() {}
-
-    // --- Getters & Setters ---
+    // Getters y Setters...
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -57,20 +46,5 @@ public class Pedido {
     public void setMontoTotal(Double montoTotal) { this.montoTotal = montoTotal; }
 
     public List<DetallePedido> getDetalle() { return detalle; }
-    public void setDetalle(List<DetallePedido> detalle) {
-        this.detalle.clear();
-        if (detalle != null) {
-            detalle.forEach(this::addDetalle);
-        }
-    }
-
-    public void addDetalle(DetallePedido d) {
-        d.setPedido(this);
-        this.detalle.add(d);
-    }
-
-    public void removeDetalle(DetallePedido d) {
-        d.setPedido(null);
-        this.detalle.remove(d);
-    }
+    public void setDetalle(List<DetallePedido> detalle) { this.detalle = detalle; }
 }

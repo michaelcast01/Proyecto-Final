@@ -3,7 +3,9 @@ package com.example.TiendaSuplementos.Controller;
 import com.example.TiendaSuplementos.Model.Usuario;
 import com.example.TiendaSuplementos.Service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,31 +17,46 @@ public class UsuarioController {
     @Autowired
     private UsuarioService service;
 
-    @GetMapping
-    public List<Usuario> listar() {
-        return service.listar();
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Usuario>> listar() {
+        List<Usuario> usuarios = service.listar();
+        return ResponseEntity.ok(usuarios);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Usuario> porId(@PathVariable Long id) {
         return service.porId(id)
-                .map(ResponseEntity::ok)
+                .map(u -> ResponseEntity.ok(u))
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<Usuario> crear(@RequestBody Usuario usuario) {
-        Usuario creado = service.guardar(usuario);
-        return ResponseEntity.ok(creado);
+        Usuario saved = service.guardar(usuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Usuario> actualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
-        Usuario actualizado = service.actualizar(id, usuario);
-        return ResponseEntity.ok(actualizado);
+    @PutMapping(
+            path = "/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Usuario> actualizar(
+            @PathVariable Long id,
+            @RequestBody Usuario usuario
+    ) {
+        try {
+            Usuario updated = service.actualizar(id, usuario);
+            return ResponseEntity.ok(updated);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         service.eliminar(id);
         return ResponseEntity.noContent().build();
