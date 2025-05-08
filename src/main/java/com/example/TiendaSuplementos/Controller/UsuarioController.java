@@ -5,7 +5,7 @@ import com.example.TiendaSuplementos.Service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.net.URI;
+
 import java.util.List;
 
 @RestController
@@ -22,30 +22,25 @@ public class UsuarioController {
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> porId(@PathVariable Long id) {
         return service.porId(id)
-                .map(ResponseEntity::ok)
+                .map(u -> ResponseEntity.ok(u))         // aquí desambiguamos ok()
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> crear(@RequestBody Usuario usuario) {
-        Usuario creado = service.guardar(usuario);
-        return ResponseEntity
-                .created(URI.create("/api/usuarios/" + creado.getId()))
-                .body(creado);
+    public Usuario crear(@RequestBody Usuario usuario) {
+        return service.guardar(usuario);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> actualizar(
+    public Usuario actualizar(
             @PathVariable Long id,
             @RequestBody Usuario usuario
     ) {
-        Usuario actualizado = service.actualizar(id, usuario);
-        return ResponseEntity.ok(actualizado);
+        return service.actualizar(id, usuario);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    public void eliminar(@PathVariable Long id) {
         service.eliminar(id);
-        return ResponseEntity.noContent().build();
     }
 }

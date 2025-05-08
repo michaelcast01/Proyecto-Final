@@ -1,59 +1,47 @@
 package com.example.TiendaSuplementos.Model;
 
 import jakarta.persistence.*;
-import java.time.Instant;
-import java.util.ArrayList;
+import java.sql.Timestamp;
 import java.util.List;
-import io.swagger.v3.oas.annotations.media.Schema;
-import com.fasterxml.jackson.annotation.*;
 
 @Entity
 @Table(name = "pedidos")
 public class Pedido {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(description = "ID de pedido", accessMode = Schema.AccessMode.READ_ONLY)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
+    // En lugar de guardar solo el id_usuario, ahora enlazamos a Usuario:
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false)
-    @JsonBackReference
     private Usuario usuario;
 
-    @Column(name = "fecha_pedido", nullable = false)
-    @Schema(description = "Fecha del pedido", example = "2025-05-08T02:00:00Z")
-    private Instant fechaPedido;
+    @Column(name = "fecha_pedido")
+    private Timestamp fechaPedido;
 
-    @Column(nullable = false)
-    @Schema(description = "Estado del pedido", example = "PENDIENTE")
     private String estado;
 
-    @Column(name = "monto_total", nullable = false)
-    @Schema(description = "Monto total del pedido")
+    @Column(name = "monto_total")
     private Double montoTotal;
 
+    // Relación con DetallePedido (si ya la tenías)
     @OneToMany(
             mappedBy = "pedido",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JsonManagedReference
-    @Schema(description = "Detalle de productos en el pedido")
-    private List<DetallePedido> detalle = new ArrayList<>();
+    private List<DetallePedido> detalle;
 
-    public Pedido() {}
-
-    // ——— Getters y setters ———
+    // getters / setters...
 
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public Usuario getUsuario() { return usuario; }
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }
 
-    public Instant getFechaPedido() { return fechaPedido; }
-    public void setFechaPedido(Instant fechaPedido) { this.fechaPedido = fechaPedido; }
+    public Timestamp getFechaPedido() { return fechaPedido; }
+    public void setFechaPedido(Timestamp fechaPedido) { this.fechaPedido = fechaPedido; }
 
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
@@ -62,11 +50,5 @@ public class Pedido {
     public void setMontoTotal(Double montoTotal) { this.montoTotal = montoTotal; }
 
     public List<DetallePedido> getDetalle() { return detalle; }
-    public void setDetalle(List<DetallePedido> detalle) {
-        this.detalle.clear();
-        if (detalle != null) {
-            detalle.forEach(d -> d.setPedido(this));
-            this.detalle.addAll(detalle);
-        }
-    }
+    public void setDetalle(List<DetallePedido> detalle) { this.detalle = detalle; }
 }
