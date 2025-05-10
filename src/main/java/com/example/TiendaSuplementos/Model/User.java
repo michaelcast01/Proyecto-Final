@@ -23,6 +23,11 @@ public class User {
 
     @Column(name = "role_id")
     private Long role_id;
+    @ManyToOne
+    @JoinColumn(name = "setting_id", insertable = false, updatable = false, nullable = true)
+    private Settings settings;
+
+    @Column(name = "setting_id", nullable = true)
     private Long setting_id;
 
     public Long getId() {
