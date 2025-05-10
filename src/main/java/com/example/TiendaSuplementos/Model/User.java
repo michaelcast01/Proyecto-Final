@@ -17,6 +17,11 @@ public class User {
     private String username;
     private String email;
     private String password;
+    @ManyToOne
+    @JoinColumn(name = "role_id", insertable = false, updatable = false)
+    private Roles role;
+
+    @Column(name = "role_id")
     private Long role_id;
     private Long setting_id;
 
