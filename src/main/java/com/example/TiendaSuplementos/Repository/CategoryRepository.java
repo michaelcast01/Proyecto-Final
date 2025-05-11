@@ -1,9 +1,8 @@
 package com.example.TiendaSuplementos.Repository;
 
-import com.example.TiendaSuplementos.Model.Pedido;
+import com.example.TiendaSuplementos.Model.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import java.util.List;
 
 @Repository
-public interface PedidoRepository extends JpaRepository<Pedido, Long> { }
+public interface CategoryRepository extends JpaRepository<Category, Long> { }
