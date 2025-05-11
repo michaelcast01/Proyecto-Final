@@ -1,8 +1,8 @@
 package com.example.TiendaSuplementos.Controller;
 
 
-import com.example.TiendaSuplementos.Model.User;
-import com.example.TiendaSuplementos.Service.UserService;
+import com.example.TiendaSuplementos.Model.Users;
+import com.example.TiendaSuplementos.Service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,32 +11,32 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-public class UserController {
+public class UsersController {
 
     @Autowired
-    private UserService service;
+    private UsersService service;
 
     @GetMapping
-    public List<User> getAll() {
+    public List<Users> getAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getById(@PathVariable Long id) {
+    public ResponseEntity<Users> getById(@PathVariable Long id) {
         return service.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody User user) {
-        User created = service.create(user);
+    public ResponseEntity<Users> create(@RequestBody Users users) {
+        Users created = service.create(users);
         return ResponseEntity.ok(created);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user) {
-        User updated = service.update(id, user);
+    public ResponseEntity<Users> update(@PathVariable Long id, @RequestBody Users users) {
+        Users updated = service.update(id, users);
         return ResponseEntity.ok(updated);
     }
 
