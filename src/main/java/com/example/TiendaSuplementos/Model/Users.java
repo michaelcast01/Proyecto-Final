@@ -62,6 +62,14 @@ public class Users {
         this.password = password;
     }
 
+    // public Roles getRole() {
+    //     return role;
+    // }
+
+    // public void setRole(Roles role) {
+    //     this.role = role;
+    // }
+
     public Long getRole_id() {
         return role_id;
     }
@@ -69,6 +77,14 @@ public class Users {
     public void setRole_id(Long role_id) {
         this.role_id = role_id;
     }
+
+    // public Settings getSettings() {
+    //     return settings;
+    // }
+
+    // public void setSettings(Settings settings) {
+    //     this.settings = settings;
+    // }
 
     public Long getSetting_id() {
         return setting_id;
