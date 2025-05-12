@@ -12,6 +12,10 @@ public class Settings {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
+    @ManyToOne
+    @JoinColumn(name = "payment_id", insertable = false, updatable = false, nullable = true)
+    private Payments payments;
+    @Column(name = "payment_id", nullable = true)
     private Long payment_id;
 
     private String name;
