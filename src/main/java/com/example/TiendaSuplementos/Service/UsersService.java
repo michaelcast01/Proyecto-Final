@@ -32,6 +32,9 @@ public class UsersService {
         return repository.findById(id);
     }
 
+    public Users findByEmail(String email) {
+        return repository.findByEmail(email);
+    }
 
     public Users create(Users users) {
         return repository.save(users);
@@ -65,5 +68,13 @@ public class UsersService {
 
     public void delete(Long id) {
         repository.deleteById(id);
+    }
+
+    public Optional<Users> login(String email, String password) {
+        Users user = repository.findByEmail(email);
+        if (user != null && user.getPassword().equals(password)) {
+            return Optional.of(user);
+        }
+        return Optional.empty();
     }
 }
