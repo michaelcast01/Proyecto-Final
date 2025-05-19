@@ -39,6 +39,9 @@ public class OrderDetail {
     @Column(name = "total", nullable = false)
     private Double total;
 
+    @Column(name = "payment_id", nullable = true)
+    private Long payment_id;
+
     @ManyToMany
     @JoinTable(
         name = "order_details",
@@ -70,6 +73,10 @@ public class OrderDetail {
 
     public Double getTotal() {
         return total;
+    }
+
+    public Long getPayment_id() {
+        return payment_id;
     }
 
     public Users getUser() {

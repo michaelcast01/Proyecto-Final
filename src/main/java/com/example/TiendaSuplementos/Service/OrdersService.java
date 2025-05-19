@@ -33,6 +33,9 @@ public class OrdersService {
         if (orders.getTotal() == null) {
             orders.setTotal(0.0);
         }
+        if (orders.getPayment_id() == null) {
+            throw new RuntimeException("Payment ID is required");
+        }
         return repository.save(orders);
     }
 
@@ -57,6 +60,9 @@ public class OrdersService {
                     }
                     if (orders.getTotal() != null) {
                         existing.setTotal(orders.getTotal());
+                    }
+                    if (orders.getPayment_id() != null) {
+                        existing.setPayment_id(orders.getPayment_id());
                     }
                     return repository.save(existing);
                 })

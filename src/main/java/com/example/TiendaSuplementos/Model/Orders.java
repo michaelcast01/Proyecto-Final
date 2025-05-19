@@ -35,6 +35,9 @@ public class Orders {
     @Column(name = "total", nullable = false)
     private Double total;
 
+    @Column(name = "payment_id", nullable = true)
+    private Long payment_id;
+
     public Long getOrder_id() {
         return order_id;
     }
@@ -81,5 +84,13 @@ public class Orders {
 
     public void setTotal(Double total) {
         this.total = total;
+    }
+
+    public Long getPayment_id() {
+        return payment_id;
+    }
+
+    public void setPayment_id(Long payment_id) {
+        this.payment_id = payment_id;
     }
 } 
