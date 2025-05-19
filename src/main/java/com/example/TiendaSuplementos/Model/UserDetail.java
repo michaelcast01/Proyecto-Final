@@ -1,6 +1,7 @@
 package com.example.TiendaSuplementos.Model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -26,6 +27,9 @@ public class UserDetail {
 
     @Column(name = "setting_id", nullable = true)
     private Long setting_id;
+
+    @OneToMany(mappedBy = "user")
+    private Set<OrderDetail> orders;
 
     public Long getId() {
         return id;
@@ -89,5 +93,9 @@ public class UserDetail {
 
     public void setSetting_id(Long setting_id) {
         this.setting_id = setting_id;
+    }
+
+    public Set<OrderDetail> getOrders() {
+        return orders;
     }
 }

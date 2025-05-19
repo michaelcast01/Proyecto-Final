@@ -4,6 +4,10 @@ import com.example.TiendaSuplementos.Model.UserDetail;
 import com.example.TiendaSuplementos.Repository.UserDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+import jakarta.persistence.TypedQuery;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +17,9 @@ public class UserDetailService {
     @Autowired
     private UserDetailRepository repository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     public UserDetailRepository getRepository() {
         return repository;
     }
@@ -21,12 +28,24 @@ public class UserDetailService {
         this.repository = repository;
     }
 
+    @Transactional
     public List<UserDetail> findAll() {
-        return repository.findAll();
+        String jpql = "SELECT DISTINCT u FROM UserDetail u " +
+                     "LEFT JOIN FETCH u.orders o " +
+                     "LEFT JOIN FETCH o.products";
+        TypedQuery<UserDetail> query = entityManager.createQuery(jpql, UserDetail.class);
+        return query.getResultList();
     }
 
+    @Transactional
     public Optional<UserDetail> findById(Long id) {
-        return repository.findById(id);
+        String jpql = "SELECT DISTINCT u FROM UserDetail u " +
+                     "LEFT JOIN FETCH u.orders o " +
+                     "LEFT JOIN FETCH o.products " +
+                     "WHERE u.id = :id";
+        TypedQuery<UserDetail> query = entityManager.createQuery(jpql, UserDetail.class);
+        query.setParameter("id", id);
+        return Optional.ofNullable(query.getSingleResult());
     }
 
     public UserDetail findByEmail(String email) {
