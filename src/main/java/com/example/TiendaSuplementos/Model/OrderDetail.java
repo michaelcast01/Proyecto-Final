@@ -1,6 +1,7 @@
 package com.example.TiendaSuplementos.Model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.Set;
@@ -15,6 +16,7 @@ public class OrderDetail {
 
     @ManyToOne
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JsonIgnoreProperties({"orders", "password"})
     private Users user;
 
     @Column(name = "user_id", nullable = false)
@@ -25,6 +27,7 @@ public class OrderDetail {
 
     @ManyToOne
     @JoinColumn(name = "status_id", insertable = false, updatable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Statuses status;
 
     @Column(name = "status_id")
@@ -42,6 +45,7 @@ public class OrderDetail {
         joinColumns = @JoinColumn(name = "order_id"),
         inverseJoinColumns = @JoinColumn(name = "product_id")
     )
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Set<Products> products;
 
     public Long getOrder_id() {

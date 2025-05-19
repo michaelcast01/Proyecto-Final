@@ -1,5 +1,6 @@
 package com.example.TiendaSuplementos.Model;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.Set;
 
@@ -14,21 +15,26 @@ public class UserDetail {
     private Long id;
     private String username;
     private String email;
+    
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     @ManyToOne
     @JoinColumn(name = "role_id", insertable = false, updatable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Roles role;
 
     @Column(name = "role_id")
     private Long role_id;
     @ManyToOne
     @JoinColumn(name = "setting_id", insertable = false, updatable = false, nullable = true)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private SettingsDetail settings;
 
     @Column(name = "setting_id", nullable = true)
     private Long setting_id;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties({"user", "user_id"})
     private Set<OrderDetail> orders;
 
     public Long getId() {
