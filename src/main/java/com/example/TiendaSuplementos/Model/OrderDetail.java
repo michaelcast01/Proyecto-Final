@@ -36,8 +36,13 @@ public class OrderDetail {
     @Column(name = "total", nullable = false)
     private Double total;
 
-    @OneToMany(mappedBy = "order")
-    private Set<OrderProductDetail> orderProducts;
+    @ManyToMany
+    @JoinTable(
+        name = "order_details",
+        joinColumns = @JoinColumn(name = "order_id"),
+        inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private Set<Products> products;
 
     public Long getOrder_id() {
         return order_id;
@@ -71,7 +76,7 @@ public class OrderDetail {
         return status;
     }
 
-    public Set<OrderProductDetail> getOrderProducts() {
-        return orderProducts;
+    public Set<Products> getProducts() {
+        return products;
     }
 } 
