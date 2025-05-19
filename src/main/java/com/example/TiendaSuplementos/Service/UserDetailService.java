@@ -1,7 +1,5 @@
 package com.example.TiendaSuplementos.Service;
 
-
-
 import com.example.TiendaSuplementos.Model.UserDetail;
 import com.example.TiendaSuplementos.Repository.UserDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,6 @@ public class UserDetailService {
         return repository.findAll();
     }
 
-
     public Optional<UserDetail> findById(Long id) {
         return repository.findById(id);
     }
@@ -39,7 +36,6 @@ public class UserDetailService {
     public UserDetail create(UserDetail users) {
         return repository.save(users);
     }
-
 
     public UserDetail update(Long id, UserDetail userDetail) {
         return repository.findById(id)
@@ -63,8 +59,6 @@ public class UserDetailService {
                 })
                 .orElseThrow(() -> new RuntimeException("User not found with id " + id));
     }
-
-
 
     public void delete(Long id) {
         repository.deleteById(id);

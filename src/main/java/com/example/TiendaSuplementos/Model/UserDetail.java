@@ -22,7 +22,7 @@ public class UserDetail {
     private Long role_id;
     @ManyToOne
     @JoinColumn(name = "setting_id", insertable = false, updatable = false, nullable = true)
-    private Settings settings;
+    private SettingsDetail settings;
 
     @Column(name = "setting_id", nullable = true)
     private Long setting_id;
@@ -75,11 +75,11 @@ public class UserDetail {
         this.role_id = role_id;
     }
 
-     public Settings getSettings() {
+     public SettingsDetail getSettings() {
          return settings;
     }
 
-     public void setSettings(Settings settings) {
+     public void setSettings(SettingsDetail settings) {
          this.settings = settings;
      }
 
