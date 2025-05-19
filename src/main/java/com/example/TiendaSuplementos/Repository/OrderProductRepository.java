@@ -1,8 +1,8 @@
 package com.example.TiendaSuplementos.Repository;
 
-import com.example.TiendaSuplementos.Model.OrderDetails;
+import com.example.TiendaSuplementos.Model.OrderProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OrderDetailsRepository extends JpaRepository<OrderDetails, Long> {} 
+public interface OrderProductRepository extends JpaRepository<OrderProduct, Long> {} 

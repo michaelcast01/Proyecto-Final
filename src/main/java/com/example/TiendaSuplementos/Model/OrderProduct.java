@@ -5,11 +5,11 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "order_details")
-public class OrderDetails {
+public class OrderProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Long detail_order_id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "order_id", insertable = false, updatable = false)
@@ -31,12 +31,12 @@ public class OrderDetails {
     @Column(name = "price", nullable = false)
     private Double price;
 
-    public Long getDetail_order_id() {
-        return detail_order_id;
+    public Long getId() {
+        return id;
     }
 
-    public void setDetail_order_id(Long detail_order_id) {
-        this.detail_order_id = detail_order_id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getOrder_id() {
