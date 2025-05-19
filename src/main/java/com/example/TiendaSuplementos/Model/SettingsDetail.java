@@ -2,12 +2,11 @@ package com.example.TiendaSuplementos.Model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "settings")
-
-// This created tables in backend
-public class Settings {
+public class SettingsDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -18,6 +17,14 @@ public class Settings {
     private Long phone;
     private String city;
     private String address;
+
+    @ManyToMany
+    @JoinTable(
+        name = "settings_payments",
+        joinColumns = @JoinColumn(name = "settings_id"),
+        inverseJoinColumns = @JoinColumn(name = "payment_id")
+    )
+    private Set<Payments> payments;
 
     public Long getId() {
         return id;
@@ -66,4 +73,12 @@ public class Settings {
     public void setAddress(String address) {
         this.address = address;
     }
-}
+
+    public Set<Payments> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(Set<Payments> payments) {
+        this.payments = payments;
+    }
+} 

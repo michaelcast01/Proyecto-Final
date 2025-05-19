@@ -28,9 +28,6 @@ public class SettingsService {
                     if (settings.getNickname() != null) {
                         existing.setNickname(settings.getNickname());
                     }
-                    if (settings.getPayment_id() != null) {
-                        existing.setPayment_id(settings.getPayment_id());
-                    }
                     if (settings.getCity() != null) {
                         existing.setCity(settings.getCity());
                     }
