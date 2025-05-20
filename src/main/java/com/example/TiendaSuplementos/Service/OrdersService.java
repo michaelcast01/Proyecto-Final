@@ -2,6 +2,7 @@ package com.example.TiendaSuplementos.Service;
 
 import com.example.TiendaSuplementos.Model.Orders;
 import com.example.TiendaSuplementos.Repository.OrdersRepository;
+import com.example.TiendaSuplementos.Repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,9 @@ public class OrdersService {
 
     @Autowired
     private OrdersRepository repository;
+
+    @Autowired
+    private UsersRepository usersRepository;
 
     public List<Orders> get() {
         return repository.findAll();
@@ -36,6 +40,12 @@ public class OrdersService {
         if (orders.getPayment_id() == null) {
             throw new RuntimeException("Payment ID is required");
         }
+        if (orders.getUser_id() == null) {
+            throw new RuntimeException("User ID is required");
+        }
+        if (!usersRepository.existsById(orders.getUser_id())) {
+            throw new RuntimeException("User with ID " + orders.getUser_id() + " does not exist");
+        }
         return repository.save(orders);
     }
 
@@ -47,6 +57,9 @@ public class OrdersService {
         return repository.findById(id)
                 .map(existing -> {
                     if (orders.getUser_id() != null) {
+                        if (!usersRepository.existsById(orders.getUser_id())) {
+                            throw new RuntimeException("User with ID " + orders.getUser_id() + " does not exist");
+                        }
                         existing.setUser_id(orders.getUser_id());
                     }
                     if (orders.getDate_order() != null) {
