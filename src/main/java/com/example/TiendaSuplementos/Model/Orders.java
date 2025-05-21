@@ -19,6 +19,13 @@ public class Orders {
     @Column(name = "user_id", nullable = false)
     private Long user_id;
 
+    @ManyToOne
+    @JoinColumn(name = "additional_info_payment_id", insertable = false, updatable = false)
+    private AdditionalInfoPayment additionalInfoPayment;
+
+    @Column(name = "additional_info_payment_id")
+    private Long additional_info_payment_id;
+
     @Column(name = "date_order", nullable = false)
     private ZonedDateTime date_order;
 
@@ -34,9 +41,6 @@ public class Orders {
 
     @Column(name = "total", nullable = false)
     private Double total;
-
-    @Column(name = "payment_id", nullable = true)
-    private Long payment_id;
 
     public Long getOrder_id() {
         return order_id;
@@ -86,11 +90,11 @@ public class Orders {
         this.total = total;
     }
 
-    public Long getPayment_id() {
-        return payment_id;
+    public Long getAdditional_info_payment_id() {
+        return additional_info_payment_id;
     }
 
-    public void setPayment_id(Long payment_id) {
-        this.payment_id = payment_id;
+    public void setAdditional_info_payment_id(Long additional_info_payment_id) {
+        this.additional_info_payment_id = additional_info_payment_id;
     }
 } 

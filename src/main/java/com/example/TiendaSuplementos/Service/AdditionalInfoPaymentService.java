@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AdditionalInfoPaymentService {
@@ -23,11 +24,14 @@ public class AdditionalInfoPaymentService {
     private UsersRepository usersRepository;
 
     public List<AdditionalInfoPayment> findAll() {
-        return repository.findAll();
+        return repository.findAll().stream()
+                .filter(payment -> payment.getActive())
+                .collect(Collectors.toList());
     }
 
     public Optional<AdditionalInfoPayment> findById(Long id) {
-        return repository.findById(id);
+        return repository.findById(id)
+                .filter(payment -> payment.getActive());
     }
 
     public AdditionalInfoPayment save(AdditionalInfoPayment additionalInfoPayment) {
@@ -67,16 +71,21 @@ public class AdditionalInfoPaymentService {
         if (additionalInfoPayment.getPostalCode() == null || additionalInfoPayment.getPostalCode().trim().isEmpty()) {
             throw new RuntimeException("Postal Code is required");
         }
-        
+
+        additionalInfoPayment.setActive(true);
         return repository.save(additionalInfoPayment);
     }
 
     public void delete(Long id) {
-        repository.deleteById(id);
+        repository.findById(id).ifPresent(payment -> {
+            payment.setActive(false);
+            repository.save(payment);
+        });
     }
 
     public AdditionalInfoPayment update(Long id, AdditionalInfoPayment additionalInfoPayment) {
         return repository.findById(id)
+                .filter(payment -> payment.getActive())
                 .map(existing -> {
                     if (additionalInfoPayment.getPayment_id() != null) {
                         // Validar que el nuevo paymentId exista
@@ -126,6 +135,6 @@ public class AdditionalInfoPaymentService {
                     }
                     return repository.save(existing);
                 })
-                .orElseThrow(() -> new RuntimeException("Additional Info Payment not found"));
+                .orElseThrow(() -> new RuntimeException("Additional Info Payment not found or inactive"));
     }
 } 

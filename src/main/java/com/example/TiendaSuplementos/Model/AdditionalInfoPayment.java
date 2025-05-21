@@ -40,6 +40,9 @@ public class AdditionalInfoPayment {
     @Column(nullable = false)
     private String postalCode;
 
+    @Column(nullable = false)
+    private Boolean active = true;
+
     public Long getId() {
         return id;
     }
@@ -142,6 +145,14 @@ public class AdditionalInfoPayment {
 
     public void setUser_id(Long user_id) {
         this.user_id = user_id;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
 }

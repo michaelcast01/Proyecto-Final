@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "additional_info_payments")
+@Table(name = "additional_info_payment_details")
 public class AdditionalInfoPaymentDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,6 +49,9 @@ public class AdditionalInfoPaymentDetail {
     
     @Column(nullable = false)
     private String postalCode;
+
+    @Column(nullable = false)
+    private Boolean active = true;
 
     public Long getId() {
         return id;
@@ -168,5 +171,13 @@ public class AdditionalInfoPaymentDetail {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 } 

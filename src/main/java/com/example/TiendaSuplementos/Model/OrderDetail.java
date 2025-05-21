@@ -39,8 +39,13 @@ public class OrderDetail {
     @Column(name = "total", nullable = false)
     private Double total;
 
-    @Column(name = "payment_id", nullable = true)
-    private Long payment_id;
+    @Column(name = "additional_info_payment_id", nullable = false)
+    private Long additional_info_payment_id;
+
+    @ManyToOne
+    @JoinColumn(name = "additional_info_payment_id", insertable = false, updatable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private AdditionalInfoPayment additionalInfoPayment;
 
     @ManyToMany
     @JoinTable(
@@ -75,8 +80,16 @@ public class OrderDetail {
         return total;
     }
 
-    public Long getPayment_id() {
-        return payment_id;
+    public Long getAdditional_info_payment_id() {
+        return additional_info_payment_id;
+    }
+
+    public void setAdditional_info_payment_id(Long additional_info_payment_id) {
+        this.additional_info_payment_id = additional_info_payment_id;
+    }
+
+    public AdditionalInfoPayment getAdditionalInfoPayment() {
+        return additionalInfoPayment;
     }
 
     public Users getUser() {
