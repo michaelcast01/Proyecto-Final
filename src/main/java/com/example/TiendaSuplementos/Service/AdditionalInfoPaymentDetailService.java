@@ -39,4 +39,15 @@ public class AdditionalInfoPaymentDetailService {
         query.setParameter("id", id);
         return Optional.ofNullable(query.getSingleResult());
     }
+
+    @Transactional
+    public List<AdditionalInfoPaymentDetail> findByUserId(Long userId) {
+        String jpql = "SELECT DISTINCT a FROM AdditionalInfoPaymentDetail a " +
+                     "LEFT JOIN FETCH a.payment p " +
+                     "LEFT JOIN FETCH a.user u " +
+                     "WHERE a.user_id = :userId";
+        TypedQuery<AdditionalInfoPaymentDetail> query = entityManager.createQuery(jpql, AdditionalInfoPaymentDetail.class);
+        query.setParameter("userId", userId);
+        return query.getResultList();
+    }
 } 

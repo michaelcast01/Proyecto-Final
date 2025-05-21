@@ -26,4 +26,9 @@ public class AdditionalInfoPaymentDetailController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/user/{userId}")
+    public List<AdditionalInfoPaymentDetail> getByUserId(@PathVariable Long userId) {
+        return service.findByUserId(userId);
+    }
 } 
