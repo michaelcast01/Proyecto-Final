@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/additional_info_payments")
-@CrossOrigin(originPatterns = "*", allowCredentials = "false")
+@RequestMapping("/api/additional-info-payments-details")
 public class AdditionalInfoPaymentDetailController {
     @Autowired
     private AdditionalInfoPaymentDetailService service;
