@@ -31,4 +31,9 @@ public class UserDetailController {
     public List<UserDetail> getByStatusId(@PathVariable Long statusId) {
         return service.findByStatusId(statusId);
     }
+
+    @GetMapping("/role/{roleId}")
+    public List<UserDetail> getByRoleId(@PathVariable Long roleId) {
+        return service.findByRoleId(roleId);
+    }
 }

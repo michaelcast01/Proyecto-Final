@@ -14,4 +14,7 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Long> {
     
     @Query("SELECT DISTINCT u FROM UserDetail u JOIN u.orders o WHERE o.status_id = :statusId")
     List<UserDetail> findByOrdersStatusId(@Param("statusId") Long statusId);
+
+    @Query("SELECT u FROM UserDetail u WHERE u.role_id = :roleId")
+    List<UserDetail> findByRoleId(@Param("roleId") Long roleId);
 }

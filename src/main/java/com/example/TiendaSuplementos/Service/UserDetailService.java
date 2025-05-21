@@ -101,4 +101,15 @@ public class UserDetailService {
         query.setParameter("statusId", statusId);
         return query.getResultList();
     }
+
+    @Transactional
+    public List<UserDetail> findByRoleId(Long roleId) {
+        String jpql = "SELECT DISTINCT u FROM UserDetail u " +
+                     "LEFT JOIN FETCH u.orders o " +
+                     "LEFT JOIN FETCH o.products " +
+                     "WHERE u.role_id = :roleId";
+        TypedQuery<UserDetail> query = entityManager.createQuery(jpql, UserDetail.class);
+        query.setParameter("roleId", roleId);
+        return query.getResultList();
+    }
 }
