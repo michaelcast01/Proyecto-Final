@@ -26,4 +26,9 @@ public class UserDetailController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/status/{statusId}")
+    public List<UserDetail> getByStatusId(@PathVariable Long statusId) {
+        return service.findByStatusId(statusId);
+    }
 }

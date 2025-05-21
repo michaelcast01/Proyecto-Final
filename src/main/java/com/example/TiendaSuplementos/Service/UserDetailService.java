@@ -90,4 +90,15 @@ public class UserDetailService {
         }
         return Optional.empty();
     }
+
+    @Transactional
+    public List<UserDetail> findByStatusId(Long statusId) {
+        String jpql = "SELECT DISTINCT u FROM UserDetail u " +
+                     "LEFT JOIN FETCH u.orders o " +
+                     "LEFT JOIN FETCH o.products " +
+                     "WHERE o.status_id = :statusId";
+        TypedQuery<UserDetail> query = entityManager.createQuery(jpql, UserDetail.class);
+        query.setParameter("statusId", statusId);
+        return query.getResultList();
+    }
 }
