@@ -30,8 +30,12 @@ public class UsersController {
 
     @PostMapping
     public ResponseEntity<Users> create(@RequestBody Users users) {
-        Users created = service.create(users);
-        return ResponseEntity.ok(created);
+        try {
+            Users created = service.create(users);
+            return ResponseEntity.ok(created);
+        } catch (IllegalArgumentException | IllegalStateException ex) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping("/{id}")

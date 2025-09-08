@@ -5,6 +5,9 @@ import com.example.TiendaSuplementos.Model.Users;
 import com.example.TiendaSuplementos.Repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.TiendaSuplementos.Repository.RolesRepository;
+import com.example.TiendaSuplementos.Repository.SettingsRepository;
+import com.example.TiendaSuplementos.Model.Roles;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +17,12 @@ public class UsersService {
 
     @Autowired
     private UsersRepository repository;
+
+    @Autowired
+    private RolesRepository rolesRepository;
+
+    @Autowired
+    private SettingsRepository settingsRepository;
 
     public UsersRepository getRepository() {
         return repository;
@@ -37,6 +46,25 @@ public class UsersService {
     }
 
     public Users create(Users users) {
+        // Validate role exists (assign default if missing)
+        Long roleId = users.getRole_id();
+        if (roleId == null) {
+            // Try to pick a sensible default role (first existing)
+            Roles defaultRole = rolesRepository.findAll().stream().findFirst().orElse(null);
+            if (defaultRole != null) {
+                users.setRole_id(defaultRole.getId());
+            } else {
+                throw new IllegalStateException("No roles configured in the system. Create roles before adding users.");
+            }
+        } else if (!rolesRepository.existsById(roleId)) {
+            throw new IllegalArgumentException("Role with id " + roleId + " does not exist.");
+        }
+
+        // If a setting_id is provided, validate it exists
+        if (users.getSetting_id() != null && !settingsRepository.existsById(users.getSetting_id())) {
+            throw new IllegalArgumentException("Setting with id " + users.getSetting_id() + " does not exist.");
+        }
+
         return repository.save(users);
     }
 
