@@ -1,13 +1,9 @@
 package com.example.TiendaSuplementos.Service;
 
-
 import com.example.TiendaSuplementos.Model.Payments;
-import com.example.TiendaSuplementos.Model.Roles;
 import com.example.TiendaSuplementos.Repository.PaymentsRepository;
-import com.example.TiendaSuplementos.Repository.RolesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 

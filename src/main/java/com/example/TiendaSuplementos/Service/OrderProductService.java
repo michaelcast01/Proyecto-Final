@@ -4,7 +4,6 @@ import com.example.TiendaSuplementos.Model.OrderProduct;
 import com.example.TiendaSuplementos.Repository.OrderProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 

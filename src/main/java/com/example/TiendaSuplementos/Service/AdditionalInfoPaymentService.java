@@ -6,7 +6,6 @@ import com.example.TiendaSuplementos.Repository.PaymentsRepository;
 import com.example.TiendaSuplementos.Repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

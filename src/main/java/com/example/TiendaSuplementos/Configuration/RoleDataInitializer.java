@@ -4,7 +4,6 @@ import com.example.TiendaSuplementos.Model.Roles;
 import com.example.TiendaSuplementos.Repository.RolesRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 @Component

@@ -2,7 +2,6 @@ package com.example.TiendaSuplementos.Model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "order_details")

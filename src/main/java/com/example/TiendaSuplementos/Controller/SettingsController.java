@@ -1,11 +1,7 @@
 package com.example.TiendaSuplementos.Controller;
 
-import com.example.TiendaSuplementos.Model.Roles;
 import com.example.TiendaSuplementos.Model.Settings;
-import com.example.TiendaSuplementos.Model.Statuses;
-import com.example.TiendaSuplementos.Service.RolesService;
 import com.example.TiendaSuplementos.Service.SettingsService;
-import com.example.TiendaSuplementos.Service.StatusesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
