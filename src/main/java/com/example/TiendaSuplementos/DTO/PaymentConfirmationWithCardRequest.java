@@ -12,7 +12,6 @@ public class PaymentConfirmationWithCardRequest {
     @Valid
     private CardDetails card;
     
-    // Constructors
     public PaymentConfirmationWithCardRequest() {}
     
     public PaymentConfirmationWithCardRequest(String paymentIntentId, CardDetails card) {
@@ -20,7 +19,6 @@ public class PaymentConfirmationWithCardRequest {
         this.card = card;
     }
     
-    // Getters and Setters
     public String getPaymentIntentId() {
         return paymentIntentId;
     }

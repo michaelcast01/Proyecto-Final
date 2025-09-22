@@ -28,23 +28,16 @@ public class EmailVerificationService {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final RestTemplate restTemplate = new RestTemplate();
 
-    // Regex pattern for basic email validation
     private static final Pattern EMAIL_PATTERN = Pattern.compile(
         "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$"
     );
 
-    /**
-     * Inicia el proceso de verificación de email de forma asíncrona
-     */
     public String initiateEmailVerification(EmailVerificationRequest request) {
-        // Generar ID único para la verificación
         String verificationId = UUID.randomUUID().toString();
 
         try {
-            // Convertir headers a JSON string
             String headersJson = objectMapper.writeValueAsString(request.getCallback().getHeaders());
 
-            // Crear entidad de verificación
             EmailVerification verification = new EmailVerification(
                 verificationId,
                 request.getEmail(),
@@ -54,10 +47,8 @@ public class EmailVerificationService {
                 headersJson
             );
 
-            // Guardar en base de datos
             repository.save(verification);
 
-            // Iniciar verificación asíncrona
             processEmailVerificationAsync(verificationId);
 
             return verificationId;
@@ -67,13 +58,9 @@ public class EmailVerificationService {
         }
     }
 
-    /**
-     * Procesa la verificación de email de forma asíncrona
-     */
     @Async("emailVerificationTaskExecutor")
     public CompletableFuture<Void> processEmailVerificationAsync(String verificationId) {
         try {
-            // Simular tiempo de procesamiento (en una implementación real, aquí iría la lógica de verificación)
             Thread.sleep(2000); // 2 segundos de simulación
 
             Optional<EmailVerification> verificationOpt = repository.findByVerificationId(verificationId);
@@ -81,21 +68,17 @@ public class EmailVerificationService {
             if (verificationOpt.isPresent()) {
                 EmailVerification verification = verificationOpt.get();
                 
-                // Simular verificación de email
                 String emailStatus = performEmailVerification(verification.getEmailAddress());
                 
-                // Actualizar estado
                 verification.setStatus("COMPLETED");
                 verification.setEmailStatus(emailStatus);
                 verification.setVerifiedAt(LocalDateTime.now());
                 repository.save(verification);
 
-                // Enviar callback
                 sendCallback(verification);
             }
 
         } catch (Exception e) {
-            // En caso de error, actualizar estado
             repository.findByVerificationId(verificationId).ifPresent(verification -> {
                 verification.setStatus("FAILED");
                 repository.save(verification);
@@ -105,16 +88,11 @@ public class EmailVerificationService {
         return CompletableFuture.completedFuture(null);
     }
 
-    /**
-     * Simula la verificación de email (en implementación real, aquí iría la lógica compleja)
-     */
     private String performEmailVerification(String email) {
-        // Validación básica de formato
         if (!EMAIL_PATTERN.matcher(email).matches()) {
             return "INVALID";
         }
 
-        // Simular diferentes resultados basados en el dominio
         String domain = email.substring(email.indexOf("@") + 1);
         
         switch (domain.toLowerCase()) {
@@ -131,12 +109,8 @@ public class EmailVerificationService {
         }
     }
 
-    /**
-     * Envía el callback con el resultado de la verificación
-     */
     private void sendCallback(EmailVerification verification) {
         try {
-            // Crear resultado para el callback
             EmailVerificationResult result = new EmailVerificationResult(
                 verification.getVerificationId(),
                 verification.getStatus(),
@@ -144,11 +118,9 @@ public class EmailVerificationService {
                 verification.getEmailStatus()
             );
 
-            // Preparar headers
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            // Agregar headers personalizados del callback
             if (verification.getCallbackHeaders() != null) {
                 try {
                     @SuppressWarnings("unchecked")
@@ -162,13 +134,10 @@ public class EmailVerificationService {
                 }
             }
 
-            // Crear request entity
             HttpEntity<EmailVerificationResult> requestEntity = new HttpEntity<>(result, headers);
 
-            // Determinar método HTTP
             HttpMethod method = HttpMethod.valueOf(verification.getCallbackMethod().toUpperCase());
 
-            // Enviar callback
             ResponseEntity<String> response = restTemplate.exchange(
                 verification.getCallbackUrl(),
                 method,
@@ -176,26 +145,18 @@ public class EmailVerificationService {
                 String.class
             );
 
-            // Log resultado (en implementación real, podrías almacenar esto)
             System.out.println("Callback sent successfully. Response: " + response.getStatusCode());
 
         } catch (Exception e) {
-            // Log error pero no fallar todo el proceso
-            System.err.println("Error sending callback for verification " + 
+            System.err.println("Error sending callback for verification " +
                 verification.getVerificationId() + ": " + e.getMessage());
         }
     }
 
-    /**
-     * Obtiene el estado de una verificación por ID
-     */
     public Optional<EmailVerification> getVerificationStatus(String verificationId) {
         return repository.findByVerificationId(verificationId);
     }
 
-    /**
-     * Endpoint para recibir callbacks (útil para testing)
-     */
     public void receiveCallback(EmailVerificationResult result) {
         System.out.println("Callback received for verification: " + result.getId());
         System.out.println("Email: " + result.getEmailAddress());

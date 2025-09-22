@@ -14,14 +14,11 @@ public class StatusesService {
     @Autowired
     private StatusesRepository repository;
 
-    // GET "Obtener Data"
     public Optional<Statuses> getById(Long id) {
         return repository.findById(id);
     }
     public List<Statuses> get() { return repository.findAll(); }
-    // SAVE Guardar
     public Statuses save(Statuses statuses) { return repository.save(statuses); }
-    // DELETE
     public void delete(Long id) { repository.deleteById(id); }
     public Statuses update(Long id, Statuses statuses) {
         return repository.findById(id)

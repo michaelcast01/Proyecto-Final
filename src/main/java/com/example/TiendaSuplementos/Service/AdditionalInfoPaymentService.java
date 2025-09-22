@@ -34,27 +34,22 @@ public class AdditionalInfoPaymentService {
     }
 
     public AdditionalInfoPayment save(AdditionalInfoPayment additionalInfoPayment) {
-        // Validar que el paymentId no sea nulo
         if (additionalInfoPayment.getPayment_id() == null) {
             throw new RuntimeException("Payment ID is required");
         }
         
-        // Validar que el pago exista
         if (!paymentsRepository.existsById(additionalInfoPayment.getPayment_id())) {
             throw new RuntimeException("Payment with ID " + additionalInfoPayment.getPayment_id() + " does not exist");
         }
 
-        // Validar que el userId no sea nulo
         if (additionalInfoPayment.getUser_id() == null) {
             throw new RuntimeException("User ID is required");
         }
 
-        // Validar que el usuario exista
         if (!usersRepository.existsById(additionalInfoPayment.getUser_id())) {
             throw new RuntimeException("User with ID " + additionalInfoPayment.getUser_id() + " does not exist");
         }
         
-        // Validar campos requeridos
         if (additionalInfoPayment.getCountry() == null || additionalInfoPayment.getCountry().trim().isEmpty()) {
             throw new RuntimeException("Country is required");
         }

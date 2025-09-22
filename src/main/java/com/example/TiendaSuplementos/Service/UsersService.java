@@ -45,10 +45,8 @@ public class UsersService {
     }
 
     public Users create(Users users) {
-        // Validate role exists (assign default if missing)
         Long roleId = users.getRole_id();
         if (roleId == null) {
-            // Try to pick a sensible default role (first existing)
             Roles defaultRole = rolesRepository.findAll().stream().findFirst().orElse(null);
             if (defaultRole != null) {
                 users.setRole_id(defaultRole.getId());
@@ -59,7 +57,6 @@ public class UsersService {
             throw new IllegalArgumentException("Role with id " + roleId + " does not exist.");
         }
 
-        // If a setting_id is provided, validate it exists
         if (users.getSetting_id() != null && !settingsRepository.existsById(users.getSetting_id())) {
             throw new IllegalArgumentException("Setting with id " + users.getSetting_id() + " does not exist.");
         }

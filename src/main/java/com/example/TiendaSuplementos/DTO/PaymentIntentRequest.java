@@ -14,17 +14,13 @@ public class PaymentIntentRequest {
     
     private String description;
     
-    // Customer information (optional)
     private String customerEmail;
     private String customerName;
     
-    // Return URL for redirect-based payment methods (optional)
     private String returnUrl;
     
-    // Card details for direct payment processing (optional)
     private CardDetails card;
     
-    // Constructors
     public PaymentIntentRequest() {}
     
     public PaymentIntentRequest(Long amount, String currency, String description) {
@@ -33,7 +29,6 @@ public class PaymentIntentRequest {
         this.description = description;
     }
     
-    // Getters and Setters
     public Long getAmount() {
         return amount;
     }

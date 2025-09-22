@@ -17,12 +17,6 @@ import java.util.Map;
 @Service
 public class StripePaymentService {
 
-    /**
-     * Creates a PaymentIntent with Stripe and optionally confirms it with card details
-     * @param request PaymentIntentRequest containing amount, currency and other details
-     * @return PaymentIntentResponse with client secret and payment details
-     * @throws StripeException if there's an error with Stripe API
-     */
     public PaymentIntentResponse createPaymentIntent(PaymentIntentRequest request) throws StripeException {
         
         // Build payment intent creation parameters
@@ -38,7 +32,6 @@ public class StripePaymentService {
                         .build()
                 );
 
-        // Add metadata if customer information is provided
         Map<String, String> metadata = new HashMap<>();
         if (request.getCustomerEmail() != null) {
             metadata.put("customer_email", request.getCustomerEmail());
@@ -51,13 +44,10 @@ public class StripePaymentService {
             paramsBuilder.putAllMetadata(metadata);
         }
 
-        // Create the PaymentIntent
         PaymentIntent intent = PaymentIntent.create(paramsBuilder.build());
 
-        // If card details are provided, create payment method and confirm payment
         if (request.getCard() != null) {
             try {
-                // Create payment method with card details
                 PaymentMethodCreateParams paymentMethodParams = PaymentMethodCreateParams.builder()
                     .setType(PaymentMethodCreateParams.Type.CARD)
                     .setCard(
@@ -72,7 +62,6 @@ public class StripePaymentService {
 
                 PaymentMethod paymentMethod = PaymentMethod.create(paymentMethodParams);
 
-                // Confirm the payment intent with the payment method
                 PaymentIntentConfirmParams confirmParams = PaymentIntentConfirmParams.builder()
                     .setPaymentMethod(paymentMethod.getId())
                     .build();
@@ -80,12 +69,10 @@ public class StripePaymentService {
                 intent = intent.confirm(confirmParams);
                 
             } catch (Exception e) {
-                // If card processing fails, return the intent as is for client-side handling
                 System.err.println("Error processing card: " + e.getMessage());
             }
         }
 
-        // Return response with client secret
         PaymentIntentResponse response = new PaymentIntentResponse(
             intent.getClientSecret(),
             intent.getId(),
@@ -98,12 +85,6 @@ public class StripePaymentService {
         return response;
     }
 
-    /**
-     * Retrieves a PaymentIntent from Stripe
-     * @param paymentIntentId The ID of the PaymentIntent to retrieve
-     * @return PaymentIntentResponse with payment details
-     * @throws StripeException if there's an error with Stripe API
-     */
     public PaymentIntentResponse getPaymentIntent(String paymentIntentId) throws StripeException {
         PaymentIntent intent = PaymentIntent.retrieve(paymentIntentId);
         
@@ -119,16 +100,9 @@ public class StripePaymentService {
         return response;
     }
 
-    /**
-     * Confirms a PaymentIntent (useful for server-side confirmation)
-     * @param paymentIntentId The ID of the PaymentIntent to confirm
-     * @return PaymentIntentResponse with updated payment details
-     * @throws StripeException if there's an error with Stripe API
-     */
     public PaymentIntentResponse confirmPaymentIntent(String paymentIntentId) throws StripeException {
         PaymentIntent intent = PaymentIntent.retrieve(paymentIntentId);
         
-        // Confirm the PaymentIntent
         intent = intent.confirm();
         
         PaymentIntentResponse response = new PaymentIntentResponse(
@@ -143,13 +117,6 @@ public class StripePaymentService {
         return response;
     }
 
-    /**
-     * Confirms a PaymentIntent with card details
-     * @param paymentIntentId The ID of the PaymentIntent to confirm
-     * @param cardDetails The card details to use for payment
-     * @return PaymentIntentResponse with updated payment details
-     * @throws StripeException if there's an error with Stripe API
-     */
     public PaymentIntentResponse confirmPaymentWithCard(String paymentIntentId, com.example.TiendaSuplementos.DTO.CardDetails cardDetails) throws StripeException {
         
         // Create payment method with card details
@@ -167,7 +134,6 @@ public class StripePaymentService {
 
         PaymentMethod paymentMethod = PaymentMethod.create(paymentMethodParams);
 
-        // Confirm the payment intent with the payment method
         PaymentIntentConfirmParams confirmParams = PaymentIntentConfirmParams.builder()
             .setPaymentMethod(paymentMethod.getId())
             .build();
@@ -187,12 +153,6 @@ public class StripePaymentService {
         return response;
     }
 
-    /**
-     * Creates and confirms a payment using safe test tokens
-     * @param request TestPaymentRequest with amount and test token
-     * @return PaymentIntentResponse with payment details
-     * @throws StripeException if there's an error with Stripe API
-     */
     public PaymentIntentResponse createTestPayment(TestPaymentRequest request) throws StripeException {
         
         // Create payment method using test token (safe for testing)
@@ -207,7 +167,6 @@ public class StripePaymentService {
 
         PaymentMethod paymentMethod = PaymentMethod.create(paymentMethodParams);
 
-        // Create payment intent
         PaymentIntentCreateParams.Builder paramsBuilder = PaymentIntentCreateParams.builder()
                 .setAmount(request.getAmount())
                 .setCurrency(request.getCurrency())
@@ -221,7 +180,6 @@ public class StripePaymentService {
                         .build()
                 );
 
-        // Add metadata if customer information is provided
         Map<String, String> metadata = new HashMap<>();
         if (request.getCustomerEmail() != null) {
             metadata.put("customer_email", request.getCustomerEmail());
@@ -235,7 +193,6 @@ public class StripePaymentService {
             paramsBuilder.putAllMetadata(metadata);
         }
 
-        // Create and confirm the payment intent
         PaymentIntent intent = PaymentIntent.create(paramsBuilder.build());
 
         PaymentIntentResponse response = new PaymentIntentResponse(

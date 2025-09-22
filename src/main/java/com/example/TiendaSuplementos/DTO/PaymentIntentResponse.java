@@ -9,7 +9,6 @@ public class PaymentIntentResponse {
     private String currency;
     private String description;
     
-    // Constructors
     public PaymentIntentResponse() {}
     
     public PaymentIntentResponse(String clientSecret, String id, String status, Long amount, String currency) {
@@ -20,7 +19,6 @@ public class PaymentIntentResponse {
         this.currency = currency;
     }
     
-    // Getters and Setters
     public String getClientSecret() {
         return clientSecret;
     }

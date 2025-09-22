@@ -10,7 +10,6 @@ public class TestPaymentRequest {
     
     private String testToken = "tok_visa";
     
-    // Constructors
     public TestPaymentRequest() {}
     
     public TestPaymentRequest(Long amount, String currency, String description) {
@@ -19,7 +18,6 @@ public class TestPaymentRequest {
         this.description = description;
     }
     
-    // Getters and Setters
     public Long getAmount() {
         return amount;
     }

@@ -20,10 +20,6 @@ public class EmailVerificationController {
     @Autowired
     private EmailVerificationService emailVerificationService;
 
-    /**
-     * Endpoint para iniciar una verificación de email asíncrona
-     * POST /api/email-verification/verify
-     */
     @PostMapping("/verify")
     public ResponseEntity<?> initiateVerification(@RequestBody EmailVerificationRequest request) {
         try {
@@ -44,10 +40,8 @@ public class EmailVerificationController {
                 return ResponseEntity.badRequest().body(createErrorResponse("Callback method is required"));
             }
 
-            // Iniciar verificación
             String verificationId = emailVerificationService.initiateEmailVerification(request);
 
-            // Respuesta exitosa
             Map<String, Object> response = new HashMap<>();
             response.put("verification_id", verificationId);
             response.put("status", "PENDING");
@@ -62,10 +56,7 @@ public class EmailVerificationController {
         }
     }
 
-    /**
-     * Endpoint para consultar el estado de una verificación
-     * GET /api/email-verification/status/{verificationId}
-     */
+
     @GetMapping("/status/{verificationId}")
     public ResponseEntity<?> getVerificationStatus(@PathVariable String verificationId) {
         try {
@@ -94,10 +85,6 @@ public class EmailVerificationController {
         }
     }
 
-    /**
-     * Endpoint de ejemplo para recibir callbacks (útil para testing)
-     * POST /api/email-verification/callback
-     */
     @PostMapping("/callback")
     public ResponseEntity<?> receiveCallback(@RequestBody EmailVerificationResult result) {
         try {
@@ -115,10 +102,6 @@ public class EmailVerificationController {
         }
     }
 
-    /**
-     * Endpoint para obtener información sobre el sistema de verificación
-     * GET /api/email-verification/info
-     */
     @GetMapping("/info")
     public ResponseEntity<?> getVerificationInfo() {
         Map<String, Object> info = new HashMap<>();
@@ -151,9 +134,6 @@ public class EmailVerificationController {
         return ResponseEntity.ok(info);
     }
 
-    /**
-     * Método helper para crear respuestas de error consistentes
-     */
     private Map<String, Object> createErrorResponse(String message) {
         Map<String, Object> error = new HashMap<>();
         error.put("error", true);

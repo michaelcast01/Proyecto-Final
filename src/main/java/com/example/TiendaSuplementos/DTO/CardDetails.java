@@ -34,7 +34,6 @@ public class CardDetails {
         this.cvc = cvc;
     }
     
-    // Getters and Setters
     public String getNumber() {
         return number;
     }

@@ -14,14 +14,11 @@ public class RolesService {
     @Autowired
     private RolesRepository repository;
 
-    // GET "Obtener Data"
     public Optional<Roles> getById(Long id) {
         return repository.findById(id);
     }
     public List<Roles> get() { return repository.findAll(); }
-    // SAVE Guardar
     public Roles save(Roles roles) { return repository.save(roles); }
-    // DELETE
     public void delete(Long id) { repository.deleteById(id); }
     public Roles update(Long id, Roles roles) {
         return repository.findById(id)
