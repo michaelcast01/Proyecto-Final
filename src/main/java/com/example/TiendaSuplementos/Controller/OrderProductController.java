@@ -1,5 +1,6 @@
 package com.example.TiendaSuplementos.Controller;
 
+import com.example.TiendaSuplementos.DTO.OrderProductDetailDTO;
 import com.example.TiendaSuplementos.Model.OrderProduct;
 import com.example.TiendaSuplementos.Service.OrderProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,29 @@ public class OrderProductController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Endpoint CRÍTICO para obtener productos de una orden con cantidades reales
+     * Este endpoint es el que debe usar el frontend para generar PDFs con cantidades correctas
+     * 
+     * @param orderId ID de la orden
+     * @return Lista de productos con cantidades reales (ej: 7 productos del mismo tipo)
+     */
+    @GetMapping("/order/{orderId}")
+    public ResponseEntity<List<OrderProductDetailDTO>> getOrderProductsByOrderId(@PathVariable Long orderId) {
+        try {
+            List<OrderProductDetailDTO> orderProducts = service.getOrderProductDetailsByOrderId(orderId);
+            
+            if (orderProducts.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            
+            return ResponseEntity.ok(orderProducts);
+        } catch (Exception e) {
+            // Log del error para debugging
+            System.err.println("Error obteniendo productos de orden " + orderId + ": " + e.getMessage());
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.TiendaSuplementos.Service;
 
+import com.example.TiendaSuplementos.DTO.OrderProductDetailDTO;
 import com.example.TiendaSuplementos.Model.OrderProduct;
 import com.example.TiendaSuplementos.Model.Products;
 import com.example.TiendaSuplementos.Repository.OrderProductRepository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -121,5 +123,31 @@ public class OrderProductService {
                     return repository.save(existing);
                 })
                 .orElseThrow(() -> new RuntimeException("Detalle de pedido no encontrado"));
+    }
+
+    /**
+     * Obtiene los detalles de productos de una orden con cantidades reales
+     * @param orderId ID de la orden
+     * @return Lista de OrderProductDetailDTO con información completa del producto y cantidades
+     */
+    public List<OrderProductDetailDTO> getOrderProductDetailsByOrderId(Long orderId) {
+        List<OrderProduct> orderProducts = repository.findByOrderId(orderId);
+        
+        return orderProducts.stream()
+                .map(orderProduct -> {
+                    // Obtener información completa del producto
+                    Products product = productsRepository.findById(orderProduct.getProduct_id())
+                            .orElseThrow(() -> new RuntimeException("Producto con ID " + orderProduct.getProduct_id() + " no existe"));
+                    
+                    // Crear el DTO con la información combinada
+                    return new OrderProductDetailDTO(
+                            orderProduct.getId(),
+                            product,
+                            orderProduct.getQuantity(), // CANTIDAD REAL COMPRADA
+                            orderProduct.getPrice(),    // PRECIO UNITARIO
+                            orderProduct.getOrder_id()
+                    );
+                })
+                .collect(Collectors.toList());
     }
 }
