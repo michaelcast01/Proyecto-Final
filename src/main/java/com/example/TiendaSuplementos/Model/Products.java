@@ -17,6 +17,9 @@ public class Products {
     private Double price;
     private Integer stock;
     private String url_image;
+    
+    @Column(nullable = false)
+    private Boolean enabled = true;
 
     public Long getId() {
         return id;
@@ -64,5 +67,13 @@ public class Products {
 
     public void setUrl_image(String url_image) {
         this.url_image = url_image;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 } 

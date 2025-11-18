@@ -16,9 +16,17 @@ public class ProductsService {
     public Optional<Products> getById(Long id) {
         return repository.findById(id);
     }
+    
+    public Optional<Products> getByIdEnabled(Long id) {
+        return repository.findByIdAndEnabledTrue(id);
+    }
 
     public List<Products> get() {
         return repository.findAll();
+    }
+    
+    public List<Products> getEnabled() {
+        return repository.findByEnabledTrue();
     }
 
     public Products save(Products products) {
@@ -47,6 +55,18 @@ public class ProductsService {
                     if (products.getUrl_image() != null) {
                         existing.setUrl_image(products.getUrl_image());
                     }
+                    if (products.getEnabled() != null) {
+                        existing.setEnabled(products.getEnabled());
+                    }
+                    return repository.save(existing);
+                })
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+    }
+    
+    public Products toggleEnabled(Long id) {
+        return repository.findById(id)
+                .map(existing -> {
+                    existing.setEnabled(!existing.getEnabled());
                     return repository.save(existing);
                 })
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
