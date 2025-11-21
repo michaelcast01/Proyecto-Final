@@ -9,10 +9,17 @@ public class CorsConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOriginPatterns("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        registry.addMapping("/**")
+                .allowedOriginPatterns(
+                    "*",
+                    "https://*.fly.dev",
+                    "https://suplements-v1.fly.dev",
+                    "http://localhost:*",
+                    "https://localhost:*"
+                )
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH")
                 .allowedHeaders("*")
-                .allowCredentials(false);
+                .allowCredentials(true)
+                .maxAge(3600);
     }
 }
