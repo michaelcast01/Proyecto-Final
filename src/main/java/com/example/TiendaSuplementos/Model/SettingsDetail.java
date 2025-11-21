@@ -1,6 +1,7 @@
 package com.example.TiendaSuplementos.Model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.Set;
 
@@ -24,6 +25,7 @@ public class SettingsDetail {
         joinColumns = @JoinColumn(name = "settings_id"),
         inverseJoinColumns = @JoinColumn(name = "payment_id")
     )
+    @JsonIgnore
     private Set<Payments> payments;
 
     public Long getId() {

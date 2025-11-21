@@ -6,10 +6,12 @@ import com.example.TiendaSuplementos.Repository.SettingsDetailRepository;
 import com.example.TiendaSuplementos.Repository.PaymentsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class SettingsDetailService {
 
     @Autowired
@@ -26,10 +28,12 @@ public class SettingsDetailService {
         return repository.findById(id);
     }
 
+    @Transactional
     public SettingsDetail create(SettingsDetail settingsDetail) {
         return repository.save(settingsDetail);
     }
 
+    @Transactional
     public SettingsDetail update(Long id, SettingsDetail settingsDetail) {
         return repository.findById(id)
                 .map(existing -> {
@@ -56,10 +60,12 @@ public class SettingsDetailService {
                 .orElseThrow(() -> new RuntimeException("Settings not found"));
     }
 
+    @Transactional
     public void delete(Long id) {
         repository.deleteById(id);
     }
 
+    @Transactional
     public SettingsDetail addPayment(Long settingsId, Long paymentId) {
         SettingsDetail settings = repository.findById(settingsId)
                 .orElseThrow(() -> new RuntimeException("Settings not found"));
@@ -71,6 +77,7 @@ public class SettingsDetailService {
         return repository.save(settings);
     }
 
+    @Transactional
     public SettingsDetail removePayment(Long settingsId, Long paymentId) {
         SettingsDetail settings = repository.findById(settingsId)
                 .orElseThrow(() -> new RuntimeException("Settings not found"));
