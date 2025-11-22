@@ -36,6 +36,9 @@ public class Users {
     @Column(name = "setting_id", nullable = true)
     private Long setting_id;
 
+    @Column(name = "enabled")
+    private Boolean enabled = true;
+
     public Long getId() {
         return id;
     }
@@ -98,5 +101,13 @@ public class Users {
 
     public void setSetting_id(Long setting_id) {
         this.setting_id = setting_id;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 }

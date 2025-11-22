@@ -47,4 +47,14 @@ public class UsersController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{id}/toggle-enabled")
+    public ResponseEntity<Users> toggleEnabled(@PathVariable Long id) {
+        try {
+            Users updated = service.toggleEnabled(id);
+            return ResponseEntity.ok(updated);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

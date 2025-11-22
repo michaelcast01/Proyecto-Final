@@ -83,12 +83,22 @@ public class UsersService {
                     if (users.getSetting_id() != null) {
                         existing.setSetting_id(users.getSetting_id());
                     }
+                    if (users.getEnabled() != null) {
+                        existing.setEnabled(users.getEnabled());
+                    }
                     return repository.save(existing);
                 })
                 .orElseThrow(() -> new RuntimeException("User not found with id " + id));
     }
 
-
+    public Users toggleEnabled(Long id) {
+        return repository.findById(id)
+                .map(existing -> {
+                    existing.setEnabled(!existing.getEnabled());
+                    return repository.save(existing);
+                })
+                .orElseThrow(() -> new RuntimeException("User not found with id " + id));
+    }
 
     public void delete(Long id) {
         repository.deleteById(id);
@@ -96,7 +106,7 @@ public class UsersService {
 
     public Optional<Users> login(String email, String password) {
         Users user = repository.findByEmail(email);
-        if (user != null && user.getPassword().equals(password)) {
+        if (user != null && user.getPassword().equals(password) && user.getEnabled()) {
             return Optional.of(user);
         }
         return Optional.empty();
