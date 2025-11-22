@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -19,15 +18,33 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
-        Optional<Users> userOptional = usersService.login(authRequest.getEmail(), authRequest.getPassword());
+        // Verificar si el usuario existe
+        Users user = usersService.findByEmail(authRequest.getEmail());
         
-        if (userOptional.isPresent()) {
+        if (user == null) {
             Map<String, Object> response = new HashMap<>();
-            response.put("message", "Login successful");
-            response.put("user", userOptional.get());
-            return ResponseEntity.ok(response);
+            response.put("message", "Email not found");
+            return ResponseEntity.status(404).body(response);
         }
         
-        return ResponseEntity.badRequest().body("Invalid credentials");
+        // Verificar si el usuario está deshabilitado
+        if (!user.getEnabled()) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Account is disabled");
+            return ResponseEntity.status(423).body(response);
+        }
+        
+        // Verificar contraseña
+        if (!user.getPassword().equals(authRequest.getPassword())) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Incorrect password");
+            return ResponseEntity.status(401).body(response);
+        }
+        
+        // Login exitoso
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Login successful");
+        response.put("user", user);
+        return ResponseEntity.ok(response);
     }
 } 
